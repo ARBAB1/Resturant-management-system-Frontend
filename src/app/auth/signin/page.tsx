@@ -1,19 +1,84 @@
 "use client";
 
-import React from "react";
+import React,{useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useRouter } from "next/navigation";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
+interface UserData {
+  id: number;
+  user_id: string;
+  name: string;
+  email: string;
+  phone_number: string;
+  address: string;
+  date_of_birth: string;
+  hire_date: string;
+  designation: string;
+  profile_picture_url: string;
+  emergency_contact: string;
+  emergency_contact_2: string;
+  access_token: string;
+  refresh_token: string;
+}
+
 
 const SignIn: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
   const router = useRouter();
-  const handleSubmit =  () => {
-   router.push("/Dashboard/InventoryDashboard");
-  };
+  // const handleSubmit =  () => {
+  //  router.push("/Dashboard/InventoryDashboard");
+  // };
 
+  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    const url = 'https://pmvm9fbb-4000.inc1.devtunnels.ms/users/login-user';
+
+    const payload = {
+      email,
+      password,
+    };
+console.log(payload)
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': "InventoryAPI",
+        },
+        body: JSON.stringify(payload),
+
+      });
+      const data= await response.json();
+ 
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to sign in');
+      }
+
+     
+      setSuccess(data.message);
+      localStorage.setItem('access_token', data.access_token);
+
+   
+      localStorage.setItem('user_data', JSON.stringify(data.user_data[0]));
+      router.push("/Dashboard/InventoryDashboard");
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
 <>
 
@@ -56,7 +121,7 @@ const SignIn: React.FC = () => {
                 Sign In to Mandi Al Khaleej
               </h2>
 
-              <form>
+              <form onSubmit={handleSignIn}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
@@ -66,6 +131,8 @@ const SignIn: React.FC = () => {
                       type="email"
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      onChange={(e) => setEmail(e.target.value)}
+            required
                     />
 
                     <span className="absolute right-4 top-4">
@@ -97,6 +164,8 @@ const SignIn: React.FC = () => {
                       type="password"
                       placeholder="6+ Characters, 1 Capital letter"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      onChange={(e) => setPassword(e.target.value)}
+            required
                     />
 
                     <span className="absolute right-4 top-4">
@@ -123,11 +192,11 @@ const SignIn: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mb-5" onClick={handleSubmit}>
+                <div >
                   <input
                     type="submit"
                     
-                    value="Sign In"
+                    value= {loading ? 'Signing In...' : 'Sign In'}
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                   />
                 </div>
@@ -141,8 +210,11 @@ const SignIn: React.FC = () => {
                       Sign Up
                     </Link>
                   </p>
+
                 </div>
               </form>
+              {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+              {success && <p style={{ color: 'green' }}>Success: {success}</p>}
             </div>
           </div>
         </div>
