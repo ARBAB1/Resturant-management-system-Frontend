@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Table, Button, Input, Modal, Form, Space, message } from "antd";
+import { Table, Button, Input, Modal, Form, Space, message, Select } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import DefaultLayout from "../../components/Layouts/DefaultLayout";
 import { api, baseUrl } from "@/constant";
@@ -17,15 +17,88 @@ interface Supplier {
   sub_category_id: number;
   about_supplier: string;
 }
+interface Category {
+  category_id: number,
+  category_name: string,
+  category_type: string,
+  description: string,
+  created_at: string,
+  updated_at: string
 
+}
+interface SubCategory {
+sub_category_id: number,
+sub_category_name: string,
+unit: string,
+category_id: number,
+category_name: string
+
+}
 const SupplierPage: React.FC = () => {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [category, setCategory] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [subCategory, setSubCategory] = useState<SubCategory[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
   const [form] = Form.useForm();
   const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
+  const fetchCategories = async (search: string = '') => {
+    try {
+      const response = await fetch(`${baseUrl}/categories/get-all-categories?page=3&limit=100&category_type=supplier&search=${search} `, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': api,
+          'accesstoken': `Bearer ${token}`,
+        }
+      });
+      const data = await response.json();
+      console.log(data.data)
+      if ( response.ok) {
 
+        // setTotalPages(data.totalPages);
+        setCategory(data.data);
+      } else {
+        message.error('Failed to fetch categories');
+      }
+    } catch (error) {
+      message.error('An error occurred while fetching countries');
+    }
+  };
+  const fetchSubCategories = async (categoryId?: number) => {
+console.log(selectedCategory,"selectedCategory")
+    try {
+    
+      const response = await fetch(`${baseUrl}/subCategory/get-sub-categories-by-category/${categoryId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': api,
+          'accesstoken': `Bearer ${token}`,
+        }
+      });
+      const data = await response.json();
+      console.log(data,"subCategory")
+      if ( response.ok) {
+
+        // setTotalPages(data.totalPages);
+        setSubCategory(data);
+        
+      } else {
+        message.error('Failed to fetch categories');
+      }
+    } catch (error) {
+      message.error('An error occurred while fetching countries');
+    }
+  };
+useEffect(() => {
+    fetchCategories();
+  
+  }, []);
+
+ 
   const fetchSupplier = async (search: string = "") => {
     try {
       const response = await fetch(
@@ -88,9 +161,16 @@ const SupplierPage: React.FC = () => {
           accesstoken: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          // supplier_id: editingSupplier?.supplier_id,
-          ...values,
-        }),
+          supplier_id: editingSupplier?.supplier_id,
+          company_name: values.company_name,
+          email: values.email,
+          phone_no: values.phone_no,
+          ref_person: values.ref_person,
+          ref_person_phone_no: values.ref_person_phone_no,
+          category_id: values.category_id,
+          sub_category_id: values.sub_category_id,
+          about_supplier:values.about_supplier
+        })
       });
       if (response.ok) {
         message.success("Supplier updated successfully");
@@ -252,19 +332,46 @@ const SupplierPage: React.FC = () => {
               <Input />
             </Form.Item>
             <Form.Item
-              name="category_id"
-              label="Category ID"
-              rules={[{ required: true, message: "Please enter the category ID" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="sub_category_id"
-              label="Sub Category ID"
-              rules={[{ required: true, message: "Please enter the sub-category ID" }]}
-            >
-              <Input />
-            </Form.Item>
+  name="category_id"
+  label="Category"
+  rules={[{ required: true, message: 'Please select a category' }]}
+>
+  <Select
+    placeholder="Select a category"
+    onChange={(value) => {
+      setSelectedCategory(value); // Update selected category ID
+      fetchSubCategories(value); // Fetch sub-categories
+    }}
+  >
+    {category.map((cat) => (
+      <Select.Option key={cat.category_id} value={cat.category_id}>
+        {cat.category_name}
+      </Select.Option>
+    ))}
+  </Select>
+</Form.Item>
+
+<Form.Item
+  name="sub_category_id"
+  label="Sub Category"
+  rules={[{ required: true, message: 'Please select a sub-category' }]}
+>
+  <Select placeholder="Select a sub-category" disabled={subCategory.length === 0}>
+    {subCategory.length > 0 ? (
+      subCategory.map((subCat) => (
+        <Select.Option key={subCat.sub_category_id} value={subCat.sub_category_id}>
+          {subCat.sub_category_name}
+        </Select.Option>
+      ))
+    ) : (
+      <Select.Option disabled value="no-data">
+        No sub-categories available
+      </Select.Option>
+    )}
+  </Select>
+</Form.Item>
+
+
             <Form.Item
               name="about_supplier"
               label="About Supplier"
@@ -274,11 +381,6 @@ const SupplierPage: React.FC = () => {
             </Form.Item>
           </Form>
         </Modal>
-        <Form>
-          <Form.Item>
-            
-          </Form.Item>
-        </Form>
       </div>
     </DefaultLayout>
   );

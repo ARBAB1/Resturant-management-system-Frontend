@@ -1,0 +1,1238 @@
+{
+	"info": {
+		"_postman_id": "b8138952-6716-4b99-a115-d83816ce740b",
+		"name": "Inventory Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21752340",
+		"_collection_link": "https://galactic-sunset-207303.postman.co/workspace/SSSSCO-WORKSPACE~47c81322-b87e-4c8f-8511-4a8df916ba9b/collection/28213391-b8138952-6716-4b99-a115-d83816ce740b?action=share&source=collection_link&creator=21752340"
+	},
+	"item": [
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const rb = pm.response.json();\r",
+									"const access_token=rb.access_token\r",
+									"console.log(access_token)\r",
+									"pm.environment.set(\"accessTokenInventory\",access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"Erna_Schuppe@gmail.com\",\r\n    \"password\":\"12345678\",\r\n    \"role_id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/users/login-user",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"login-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Signup / Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{$randomFullName}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "{{$randomEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "{{$randomPhoneNumber}}",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "{{$randomStreetAddress}}",
+									"type": "text"
+								},
+								{
+									"key": "date_of_birth",
+									"value": "2000-05-12",
+									"type": "text"
+								},
+								{
+									"key": "hire_date",
+									"value": "2023-02-12",
+									"type": "text"
+								},
+								{
+									"key": "role_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "designation",
+									"value": "Inventory Manager",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/phys_imp.jpg",
+									"disabled": true
+								},
+								{
+									"key": "emergency_contact",
+									"value": "{{$randomPhoneNumberExt}}",
+									"type": "text"
+								},
+								{
+									"key": "emergency_contact_2",
+									"value": "{{$randomPhoneNumberExt}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/users/signUp-user",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"users",
+								"signUp-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/users/get-all-users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/users/get-all-users",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"users",
+								"get-all-users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "INGREDIENTS",
+			"item": [
+				{
+					"name": "add ingredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Flour\",\r\n    \"barcode\": \"1234567890\",\r\n    \"unit\": \"kg\",\r\n    \"quantity\": 50.5,\r\n    \"expiry_date\": \"2024-12-31\",\r\n    \"batch_no\": \"BATCH202407\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/ingredients/add-ingredient",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"ingredients",
+								"add-ingredient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update ingredents",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"ingredient_id\":\"1\",\r\n    \"name\": \" White Flour\",\r\n    \"barcode\": \"123456756890\",\r\n    \"unit\": \"kg\",\r\n    \"quantity\": 600.5,\r\n    \"expiry_date\": \"2024-12-26\",\r\n    \"batch_no\": \"BATCH202410\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/ingredients/update-ingredient",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"ingredients",
+								"update-ingredient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all ingredients",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/ingredients/get-all-ingredients",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"ingredients",
+								"get-all-ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get ingredient by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/ingredients/get-ingredient-by-Id/2",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"ingredients",
+								"get-ingredient-by-Id",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "INVENTORY",
+			"item": [
+				{
+					"name": "{{base_url_inventory}}/inventory/add-inventory",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "item_name",
+									"value": "Carrots",
+									"type": "text"
+								},
+								{
+									"key": "barcode",
+									"value": "df#afjipowej",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "kg",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/home.PNG"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/inventory/add-inventory",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"inventory",
+								"add-inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/inventory/update-inventory",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "inventory_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "item_name",
+									"value": "Black pepper update",
+									"type": "text"
+								},
+								{
+									"key": "barcode",
+									"value": "SA#4254542",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "kg",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "40000",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "900",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/home.PNG"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/inventory/update-inventory",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"inventory",
+								"update-inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/inventory/get-all-inventory-items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/inventory/get-all-inventory-items",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"inventory",
+								"get-all-inventory-items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/inventory/get-inventory-by-Id/1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/inventory/get-inventory-by-Id/1",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"inventory",
+								"get-inventory-by-Id",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/inventory/delete-inventory",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"inventory_id\":\"5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/inventory/delete-inventory",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"inventory",
+								"delete-inventory"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SUPPLIER",
+			"item": [
+				{
+					"name": "{{base_url_inventory}}/supplier/add-supplier",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"company_name\":\"{{$randomCompanyName}}\" ,\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"phone_no\":\"{{$randomPhoneNumber}}\",\r\n    \"ref_person\":\"{{$randomFullName}}\",\r\n    \"ref_person_phone_no\":\"{{$randomPhoneNumber}}\",\r\n    \"supplier_category\":\"dairy\",\r\n    \"supplier_sub_category\":\"milk\",\r\n    \"about_supplier\":\"{{$randomLoremParagraph}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/supplier/add-supplier",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"supplier",
+								"add-supplier"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/supplier/update-supplier",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"supplier_id\":\"2\",\r\n    \"company_name\":\"{{$randomCompanyName}}\" ,\r\n    \"email\":\"abdullahmamji7@gmail.com\",\r\n    \"phone_no\":\"{{$randomPhoneNumber}}\",\r\n    \"ref_person\":\"{{$randomFullName}}\",\r\n    \"ref_person_phone_no\":\"{{$randomPhoneNumber}}\",\r\n    \"supplier_category\":\"vegetables\",\r\n    \"supplier_sub_category\":\"tomato\",\r\n    \"about_supplier\":\"{{$randomLoremParagraph}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/supplier/update-supplier",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"supplier",
+								"update-supplier"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/supplier/delete-supplier",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"supplier_id\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/supplier/delete-supplier",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"supplier",
+								"delete-supplier"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/supplier/get-all-suppliers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/supplier/get-all-suppliers",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"supplier",
+								"get-all-suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/supplier/get-supplier-by-Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/supplier/get-supplier-by-Id/2",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"supplier",
+								"get-supplier-by-Id",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CATEGORIES",
+			"item": [
+				{
+					"name": "{{base_url_inventory}}/categories/add-category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category_name\": \"dairy\",\r\n    \"description\": \"{{$randomPhrase}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/categories/add-category",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"categories",
+								"add-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/categories/update-category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category_id\":\"1\",\r\n    \"category_name\":\"\",\r\n    \"description\": \"{{$randomPhrase}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/categories/update-category",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"categories",
+								"update-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/categories/delete-category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"category_id\":\"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/categories/delete-category",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"categories",
+								"delete-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/categories/get-all-categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/categories/get-all-categories",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"categories",
+								"get-all-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/categories/get-category-by-Id/1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/categories/get-category-by-Id/1",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"categories",
+								"get-category-by-Id",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SUB-CATEGORY",
+			"item": [
+				{
+					"name": "{{base_url_inventory}}/subCategory/add-sub-category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sub_category_name\":\"milk\",\r\n    \"unit\":\"litre\",\r\n    \"category_id\":\"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/subCategory/add-sub-category",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"subCategory",
+								"add-sub-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/subCategory/update-sub-category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sub_category_id\":\"2\",\r\n    \"sub_category_name\":\"mutton\",\r\n    \"unit\":\"kg\",\r\n    \"category_id\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/subCategory/update-sub-category",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"subCategory",
+								"update-sub-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/subCategory/delete-sub-category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sub_category_id\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/subCategory/delete-sub-category",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"subCategory",
+								"delete-sub-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/subCategory/get-all-sub-categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/subCategory/get-all-sub-categories",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"subCategory",
+								"get-all-sub-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/subCategory/get-sub-category-by-Id/1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/subCategory/get-sub-category-by-Id/1",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"subCategory",
+								"get-sub-category-by-Id",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/subCategory/get-sub-categories-by-category/1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/subCategory/get-sub-categories-by-category/1",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"subCategory",
+								"get-sub-categories-by-category",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "INVENTORY ORDERS",
+			"item": [
+				{
+					"name": "{{base_url_inventory}}/inventoryOrder/add-inventory-order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"order_valid_until\": \"2024-10-10\",\r\n  \"supplier_id\": 3,\r\n  \"products\": [\r\n    {\r\n      \"category_id\": 2,\r\n      \"sub_category_id\": 3,\r\n      \"quantity\": 20\r\n    },\r\n    {\r\n      \"category_id\": 2,\r\n      \"sub_category_id\": 3,\r\n      \"quantity\": 170\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_inventory}}/inventoryOrder/add-inventory-order",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"inventoryOrder",
+								"add-inventory-order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base_url_inventory}}/inventoryOrder/get-all-inventory-orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{xapi_inventory}}",
+								"type": "text"
+							},
+							{
+								"key": "accesstoken",
+								"value": "Bearer {{accessTokenInventory}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_inventory}}/inventoryOrder/get-all-inventory-orders",
+							"host": [
+								"{{base_url_inventory}}"
+							],
+							"path": [
+								"inventoryOrder",
+								"get-all-inventory-orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

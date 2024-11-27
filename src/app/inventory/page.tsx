@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Input, Modal, Form, InputNumber, Upload, Space, message } from 'antd';
 import { UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import DefaultLayout from "../../components/Layouts/DefaultLayout";
+import { api, baseUrl } from '@/constant';
 
 interface Product {
   key: string;
@@ -21,8 +22,35 @@ const InventoryPage: React.FC = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>('');
-
+  const token = localStorage.getItem('access_token');
   const [form] = Form.useForm();
+
+  const fetchProducts = async (search: string = '') => {
+    try{
+      const response = await fetch(`${baseUrl}/inventoryOrder/get-all-inventory-orders?page=1&limit=100&search=&{search}`,{
+          method: 'GET',
+          headers:{
+             'Content-Type':'application/json',
+             'X-api-key':api,
+             'accesstoken': `Bearer ${token}`,
+          }
+          });
+          const data = await response.json() 
+          console.log(data.data)
+          if(response.ok){
+           setProducts(data.data)
+           console.log('kjhgfds')
+          }else{
+            message.error('failed to fetch products')
+          }
+          }catch(error){
+             message.error('An error occurred while fetching products')
+          };
+          };
+
+          useEffect(() => {
+            fetchProducts();
+          }, []);
 
   const showAddProductModal = () => {
     form.resetFields();
@@ -79,9 +107,10 @@ const InventoryPage: React.FC = () => {
     return false;
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = products.filter(
+    (product) => product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
   const columns = [
     {
