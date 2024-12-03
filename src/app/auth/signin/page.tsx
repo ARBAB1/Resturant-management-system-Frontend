@@ -38,46 +38,47 @@ const SignIn: React.FC = () => {
 
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccess('');
+//     setLoading(true);
+//     setError('');
+//     setSuccess('');
 
-    const url = 'https://pmvm9fbb-4000.inc1.devtunnels.ms/users/login-user';
+//     const url = 'https://pmvm9fbb-4000.inc1.devtunnels.ms/users/login-user';
 
-    const payload = {
-      email,
-      password,
-    };
-console.log(payload)
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': "InventoryAPI",
-        },
-        body: JSON.stringify(payload),
+//     const payload = {
+//       email,
+//       password,
+//     };
+// console.log(payload)
+//     try {
+//       const response = await fetch(url, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'x-api-key': "InventoryAPI",
+//         },
+//         body: JSON.stringify(payload),
 
-      });
-      const data= await response.json();
+//       });
+//       const data= await response.json();
  
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.message || 'Failed to sign in');
-      }
+//       if (!response.ok) {
+//         const errorResponse = await response.json();
+//         throw new Error(errorResponse.message || 'Failed to sign in');
+//       }
 
      
-      setSuccess(data.message);
-      localStorage.setItem('access_token', data.access_token);
+//       setSuccess(data.message);
+//       localStorage.setItem('access_token', data.access_token);
 
    
-      localStorage.setItem('user_data', JSON.stringify(data.user_data[0]));
-      router.push("/Dashboard/InventoryDashboard");
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+//       localStorage.setItem('user_data', JSON.stringify(data.user_data[0]));
+//       router.push("/Dashboard/InventoryDashboard");
+//     } catch (err: any) {
+//       setError(err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+router.push("/Dashboard/InventoryDashboard");
   };
   return (
 <>

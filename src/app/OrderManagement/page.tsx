@@ -11,6 +11,8 @@ interface Order {
   specialRequest: string;
   status: 'Pending' | 'In Progress' | 'Completed' | 'Cancelled';
   price: number;
+  customerName: string;
+  paymentMode: 'Card' | 'COD';
 }
 
 const menuOptions = [
@@ -21,6 +23,10 @@ const menuOptions = [
 ];
 
 const statusOptions = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
+const paymentOptions = [
+  { label: 'Card', value: 'Card' },
+  { label: 'Cash on Delivery (COD)', value: 'COD' },
+];
 
 const RestaurantOrderPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -80,6 +86,11 @@ const RestaurantOrderPage: React.FC = () => {
       key: 'orderCode',
     },
     {
+      title: 'Customer Name',
+      dataIndex: 'customerName',
+      key: 'customerName',
+    },
+    {
       title: 'Menu Items',
       dataIndex: 'menuItems',
       key: 'menuItems',
@@ -100,6 +111,11 @@ const RestaurantOrderPage: React.FC = () => {
       dataIndex: 'price',
       key: 'price',
       render: (price: number) => `$${price.toFixed(2)}`,
+    },
+    {
+      title: 'Payment Mode',
+      dataIndex: 'paymentMode',
+      key: 'paymentMode',
     },
     {
       title: 'Action',
@@ -141,6 +157,9 @@ const RestaurantOrderPage: React.FC = () => {
             <Form.Item name="orderCode" label="Order Code" rules={[{ required: true, message: 'Please enter the order code' }]}>
               <Input />
             </Form.Item>
+            <Form.Item name="customerName" label="Customer Name" rules={[{ required: true, message: 'Please enter the customer name' }]}>
+              <Input />
+            </Form.Item>
             <Form.Item name="menuItems" label="Menu Items" rules={[{ required: true, message: 'Please select menu items' }]}>
               <Select mode="multiple" options={menuOptions} />
             </Form.Item>
@@ -158,6 +177,9 @@ const RestaurantOrderPage: React.FC = () => {
                 </Select>
               </Form.Item>
             )}
+            <Form.Item name="paymentMode" label="Payment Mode" rules={[{ required: true, message: 'Please select the payment mode' }]}>
+              <Select options={paymentOptions} />
+            </Form.Item>
             <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please enter the price' }]}>
               <InputNumber min={0} style={{ width: '100%' }} />
             </Form.Item>
